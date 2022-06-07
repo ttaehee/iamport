@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="euc_kr">
+<title>구매</title>
+
+<!-- jQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+<!-- iamport.payment.js -->
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+
+</head>
+<body>
+
+<script type="text/javascript">
+function iamport(){
+	
+	const userId = document.getElementById("userId");
+	const address = document.getElementById("address");
+	const price = document.getElementById("price");
+	
+	$.ajax({
+		url:"/purchase/api/insertPurchase",
+		method="POST",
+		data:JSON.stringify({
+			userId : userId,
+			address : address,
+			price : price,
+		}),
+		headers : {
+			"Accept" : "application/json",
+			"Content-Type" : "application/json"
+		},
+		dataType : "json",
+		success : function(data){
+		
+			//가맹점 식별코드
+			IMP.init('imp83644059'); // 콘솔에서 확인
+			IMP.request_pay(//결제창 호출하는 함수
+			    { //param : 주문을 위해 주소입력하고 결제수단 선택 등등 과정이 param 채우는과정
+			    pg: 'kcp',
+	 		  	pay_method: 'card',
+	  		  	merchant_uid: data.purchaseNo,
+	  		  	name: data.userId,
+	  		  	amount: data.price,
+	   		 	buyer_email: "gildong@gmail.com",
+	   			buyer_name: data.userId,
+	  			buyer_tel: "010-1111-1111",
+	  		  	buyer_addr: data.address,
+	   		 	buyer_postcode: "01181",
+	   		 //유저가 입력한 정보들이 카드사 서버로 전달 - 인증성공 - 콜백함수호출 
+			}, function(rsp) {
+				//rsp : 결제결과 객체 포함 (success 결제성공여부/ paid_amount 실결제된금액/ imp_uid 아임포트거래 고유번호)
+				console.log(rsp);
+				if(rsp.success){
+					 var msg = '결제가 완료되었습니다.';
+	 		      	 msg += '고유ID : ' + rsp.imp_uid;
+	 		      	 msg += '상점 거래ID : ' + rsp.merchant_uid;
+	 		      	 msg += '결제 금액 : ' + rsp.paid_amount;
+	  		      	 msg += '카드 승인번호 : ' + rsp.apply_num;
+	  		      	
+	  		      	 $.ajax({
+	  		  			url:"/purchase/api/verifyIamport",
+	  		  			method="POST",
+	  		  			data:JSON.stringify({
+	  		  				imp_uid : rsp.imp_uid,
+	  		  				purchaseNo : rsp.merchant_uid,
+	  		  				amount : rsp.paid_amount
+	  		  			}),
+	  		  			headers : {
+	  		  				"Accept" : "application/json",
+	  		  				"Content-Type" : "application/json"
+	  		  			},
+	  		  			dataType : "json",
+	  		  			success : function(data){
+	  		  				console.log(data);
+	  		  			}
+	  		      	 })
+				}else{
+					var msg = "결제에 실패였습니다.";
+					msg += '에러내용 : ' + rsp.error_msg;
+				}
+				alert(msg);
+			})
+		}
+	})
+}
+	
+		
+</script>
+<button onclick="iamport()">결제테스트하기</button>
+
+</body>
+</html>

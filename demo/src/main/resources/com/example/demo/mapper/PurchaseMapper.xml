@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+           "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.example.demo.mapper.PurchaseMapper"> 
+
+	<resultMap id="purchaseSelectMap" type="purchase">
+		<result property="purchaseNo" 			column="purchase_no" 		jdbcType="NUMERIC"/>
+		<result property="userId" 				column="user_id" 			jdbcType="VARCHAR"/> 
+		<result property="price" 				column="price"		 		jdbcType="NUMERIC"/> 
+		<result property="address" 				column="address" 			jdbcType="VARCHAR"/>  
+		<result property="imp_uid" 				column="imp_uid" 			jdbcType="VARCHAR"/> 
+		<result property="amount" 				column="amount" 			jdbcType="NUMERIC"/> 
+	</resultMap>
+	
+	<insert id="insertPurchase">
+		INSERT INTO purchasetest
+		(purchase_no, user_id, price, address,
+		imp_uid, amount)
+		values((seq_purchase_no.NEXTVAL),#{userId},#{price:NUMERIC}, 
+		#{address:VARCHAR}, #{imp_uid:VARCHAR}, #{amount:NUMERIC})
+		<selectKey keyProperty="purchaseNo" resultType="int" order="AFTER">
+			SELECT seq_purchase_no.CURRVAL FROM DUAL
+		</selectKey>
+	</insert>
+	
+	<select id="getPurchase" resultType="purchase">
+		SELECT * FROM purchasetest
+		<where>
+			purchase_no = #{purchaseNo}
+		</where>
+	</select>
+	
+	<update id="updatePurchase">
+		UPDATE purchasetest
+		<set>
+			imp_uid=#{imp_uid:VARCHAR} AND amound=#{amount}
+		</set>
+		<where>
+			purchase_no = #{purcahseNo}
+		</where>
+	</update>
+
+</mapper>

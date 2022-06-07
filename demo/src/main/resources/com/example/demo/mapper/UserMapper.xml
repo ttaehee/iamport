@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.example.demo.mapper.UserMapper"> 
+
+	<select id="selectUsers" resultType="com.example.demo.domain.User"> 
+	SELECT '111' userId, 'Hailey' userName, '02-0000-1111' phoneNumber 
+	FROM DUAL 
+	UNION 
+	SELECT '222' userId, 'Dana' userName, '031-0000-2222' phoneNumber 
+	FROM DUAL 
+	UNION 
+	SELECT '333' userId, 'Emma' userName, '02-0000-3333' phoneNumber FROM DUAL 
+	</select> 
+</mapper>

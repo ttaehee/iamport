@@ -1,0 +1,20 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@db202204092247_high?TNS_ADMIN=/Users/yslee/oracle/Wallet_DB202204092247
+    username: admin
+    password: Vywjdans!234
+    driver-class-name: oracle.jdbc.OracleDriver
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+
+mybatis:
+  type-aliases-package: com.example.demo.domain
+  mapper-locations: com.example.demo.mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+

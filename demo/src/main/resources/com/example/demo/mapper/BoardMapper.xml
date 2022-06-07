@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+           "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+
+<mapper namespace="com.example.demo.mapper.BoardMapper"> 
+
+	<select id="getBoardCount" resultType="int">
+        SELECT COUNT(*)
+         FROM BOARD
+    </select>
+    
+     <insert id="insertBoard" parameterType="com.example.demo.domain.Board">
+        INSERT INTO BOARD (TITLE, CONTENTS, CREATE_AT, UPDATE_AT)
+        VALUES(#{title}, #{content}, SYSDATE, SYSDATE) 
+    </insert>
+
+    <select id="getListBoard" resultType="com.example.demo.domain.Board">
+        SELECT *
+         FROM BOARD
+    </select>
+
+    <select id="getBoard" parameterType="int" resultType="com.example.demo.domain.Board">
+        SELECT *
+         FROM BOARD
+         WHERE ID = #{boardNo}
+    </select>
+
+    <update id="updateBoard" parameterType="com.example.demo.domain.Board">
+        UPDATE BOARD
+         SET
+        <if test="title != null">
+            TITLE = #{title}
+        </if>
+        <if test="title != null and content != null"> , </if>
+        <if test="content != null">
+            CONTENTS = #{content}
+        </if>
+        , UPDATE_AT = SYSDATE
+        WHERE ID = #{boardNo}
+    </update>
+
+    <delete id="deleteBoard" parameterType="int">
+        DELETE FROM BOARD WHERE ID = #{boardNo}
+    </delete>
+
+</mapper>
