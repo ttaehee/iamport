@@ -18,8 +18,8 @@
 		INSERT INTO purchasetest
 		(purchase_no, user_id, price, address,
 		imp_uid, amount)
-		values((seq_purchase_no.NEXTVAL),#{userId},#{price:NUMERIC}, 
-		#{address:VARCHAR}, #{imp_uid:VARCHAR}, #{amount:NUMERIC})
+		values((seq_purchase_no.NEXTVAL),#{userId:VARCHAR},#{price:NUMERIC}, 
+		#{address:VARCHAR}, #{imp_uid:VARCHAR}, #{amount:VARCHAR})
 		<selectKey keyProperty="purchaseNo" resultType="int" order="AFTER">
 			SELECT seq_purchase_no.CURRVAL FROM DUAL
 		</selectKey>
@@ -35,10 +35,10 @@
 	<update id="updatePurchase">
 		UPDATE purchasetest
 		<set>
-			imp_uid=#{imp_uid:VARCHAR} AND amound=#{amount}
+			imp_uid=#{imp_uid:VARCHAR}, amount=#{amount:VARCHAR}
 		</set>
 		<where>
-			purchase_no = #{purcahseNo}
+			purchase_no = #{purchaseNo}
 		</where>
 	</update>
 

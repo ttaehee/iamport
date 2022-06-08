@@ -41,16 +41,16 @@ import com.siot.IamportRestClient.response.Payment;
 @RequestMapping("/purchase/*")
 public class IamportRestController {
 
-	private IamportClient api;
+	//private IamportClient api;
 	
 	@Autowired
 	private IamportService service;
 	
 	
-	public IamportRestController() {
-		this.api=new IamportClient("3479616353644323", 
-		"cbe3de64fe45c7f463b3635d100f3b778c1bb755d258dec8c9d4f22f77fb9e7093be3b1c11843648");
-	}
+	//public IamportRestController() {
+	//	this.api=new IamportClient("3479616353644323", 
+	//	"cbe3de64fe45c7f463b3635d100f3b778c1bb755d258dec8c9d4f22f77fb9e7093be3b1c11843648");
+	//}
 	
 	/*
 	@ResponseBody
@@ -65,7 +65,6 @@ public class IamportRestController {
 	}
 	*/
 	
-	//구매 인서트 
 	@PostMapping("api/insertPurchase")
 	public Purchase insertPurchase(Purchase purchase, Model model) {
 		
@@ -81,30 +80,34 @@ public class IamportRestController {
 	@PostMapping("api/verifyIamport")
 	public JSONObject verifyIamport(@RequestBody Purchase purchase) {
 		
+		System.out.println("====================verify : "+purchase);
 		int success=service.updatePurchase(purchase);
+		System.out.println("=============update : "+success);
 		purchase=service.getPurchase(purchase.getPurchaseNo());
 		
 		String token=service.getImportToken();
-		System.out.println("token : "+ token);
+		System.out.println("=====================token : "+ token);
 		JSONObject json=new JSONObject();
 		
 		if(success ==1) {
 			String portAmount=service.getAmount(token, purchase.getPurchaseNo());
 			
-			if(purchase.getAmount().equals(portAmount)) {
+			if(purchase.getPrice() == Integer.parseInt(portAmount)) {
 				json.put("purchase", purchase);
 				json.put("sucess", "true");
 				json.put("message", "성공!!!!!!");
 			}else {
 				json.put("success", "false");
-				if(service.cancelPayment(token, purchase.getImp_uid())==1) {
-					json.put("message", "환불성공!!!!!");
+				int cancel=service.cancelPayment(token, Integer.toString(purchase.getPurchaseNo()));
+				if(cancel==1) {
+					json.put("message", "성공!!!!!");
 				}else {
-					json.put("message", "환불실패");
+					json.put("message", "실패");
 				}
 			}
 		}else {
-			json.put("message", "결제실패");
+			service.cancelPayment(token, Integer.toString(purchase.getPurchaseNo()));
+			json.put("message", "결제실패ㅠㅠ");
 		}
 		return json;
 	}

@@ -17,7 +17,7 @@ function iamport(){
 	IMP.request_pay({
 	    pg : 'html5_inicis',
 	    pay_method : 'card',
-	    merchant_uid : '07',
+	    merchant_uid : '188',
 	    name : '상품222' , //결제창에서 보여질 이름
 	    amount : '100', //실제 결제되는 가격
 	    buyer_email : 'iamport@siot.do',
@@ -35,11 +35,11 @@ function iamport(){
 	        msg += '카드 승인번호 : ' + rsp.apply_num;
 	        
 	        $.ajax({
-	        	url:"/purchase/api/verifyIamport",
+	        	url:"purchase/api/verifyIamport",
 	        	method:"POST",
 	        	data:JSON.stringify({
 	        		imp_uid :rsp.imp_uid,
-		        	merchat_uid :rsp.merchant_uid,
+		        	purchaseNo :rsp.merchant_uid,
 		        	amount:rsp.paid_amount
 	        	}),
 	        	headers : {

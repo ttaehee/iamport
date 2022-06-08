@@ -3,24 +3,49 @@ package com.example.demo.domain;
 import java.sql.Date;
 import java.util.List;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
-@ToString
-@Setter
-@Getter
 public class CustomProduct {
 	private int customProductNo;
 	private User user;
-	private Product product;
 	private int purchaseNo;
 	private int count;
 	private int price;
 	private String cartStatus;
-	private Date regDate;
+	public int getCustomProductNo() {
+		return customProductNo;
+	}
+	public void setCustomProductNo(int customProductNo) {
+		this.customProductNo = customProductNo;
+	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+	public int getPurchaseNo() {
+		return purchaseNo;
+	}
+	public void setPurchaseNo(int purchaseNo) {
+		this.purchaseNo = purchaseNo;
+	}
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
+	}
+	public int getPrice() {
+		return price;
+	}
+	public void setPrice(int price) {
+		this.price = price;
+	}
+	public String getCartStatus() {
+		return cartStatus;
+	}
+	public void setCartStatus(String cartStatus) {
+		this.cartStatus = cartStatus;
+	}
 	
-	// customParts를 가지고 있다
-	private List<CustomParts> minusParts; //제외재료 
-	private List<CustomParts> plusParts; //추가재료 
+	
 }

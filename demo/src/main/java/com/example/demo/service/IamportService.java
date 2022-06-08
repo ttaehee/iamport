@@ -33,6 +33,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.example.demo.domain.Purchase;
+import com.example.demo.mapper.PurchaseMapper;
 
 @Service
 public class IamportService {
@@ -46,7 +47,7 @@ public class IamportService {
 	public static final String SECRET = "cbe3de64fe45c7f463b3635d100f3b778c1bb755d258dec8c9d4f22f77fb9e7093be3b1c11843648";
 	
 	@Autowired
-	private IamportService purchaseMapper;
+	private PurchaseMapper purchaseMapper;
 	
 	
 
@@ -66,8 +67,7 @@ public class IamportService {
 		return purchaseMapper.updatePurchase(purchase);
 	}
 		
-	 // 아임포트 인증(토큰)을 받아주는 함수
-	
+	 //아임포트 인증(토큰)받아주는 함수
 	public String getImportToken() {
 		String result = "";
 		HttpClient client = HttpClientBuilder.create().build();
@@ -78,12 +78,10 @@ public class IamportService {
 		try {
 			post.setEntity(new UrlEncodedFormEntity(convertParameter(m)));
 			HttpResponse res = client.execute(post);
-			//jackson objectmapper 객체생성 
 			
 			ObjectMapper mapper = new ObjectMapper();
 			String body = EntityUtils.toString(res.getEntity());
-			//JsonNode 생성(readvalue)
-			//문자열을 맵퍼로 읽어서 트리에 넣어줌 
+			
 			JsonNode rootNode = mapper.readTree(body);
 			JsonNode resNode = rootNode.get("response");
 			result = resNode.get("access_token").asText();
@@ -189,7 +187,7 @@ public class IamportService {
 		}
 	}
 	
-	 // 아임포트 결제정보를 조회해서 결제금액을 뽑아주는 함수
+	 // 아임포트 결제정보에서 amount 조회
 	public String getAmount(String token, int mId) {
 		String amount = "";
 		HttpClient client = HttpClientBuilder.create().build();
@@ -203,6 +201,7 @@ public class IamportService {
 			JsonNode rootNode = mapper.readTree(body);
 			JsonNode resNode = rootNode.get("response");
 			amount = resNode.get("amount").asText();
+			System.out.println("======================amount : "+amount);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
