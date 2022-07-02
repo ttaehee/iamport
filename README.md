@@ -6,7 +6,7 @@
 
 ```javascript
 <!-- jQuery -->
-<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script> <br/>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
 <!-- iamport.payment.js -->
 <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 ```
@@ -59,13 +59,13 @@ $.ajax({
       IMP.request_pay(
           { 
           pay_method: data.paymentCondition,
-            merchant_uid: data.purchaseNo,
-            name: "밀키트",
-            amount: data.price,
+          merchant_uid: data.purchaseNo,
+          name: "밀키트",
+          amount: data.price,
           buyer_email: data.email,
           buyer_name: data.name,
           buyer_tel: data.phone,
-            buyer_addr: data.address
+          buyer_addr: data.address
         }, function(rsp) {
           if(rsp.success){
             let msg = '결제가 완료되었습니다.';
@@ -74,9 +74,9 @@ $.ajax({
                   url:"api/verifyIamport",
                   method:"POST",
                   data:JSON.stringify({
-                    imp_uid : rsp.imp_uid,
-                    purchaseNo : rsp.merchant_uid,
-                    amount : rsp.paid_amount
+                      imp_uid : rsp.imp_uid,
+                      purchaseNo : rsp.merchant_uid,
+                      amount : rsp.paid_amount
                }),
                headers : {
                     "Accept" : "application/json",
@@ -84,15 +84,12 @@ $.ajax({
                   },
                   dataType : "json",
                   success : function(data){
-                    //console.log(data);
                     window.location.href='/purchase/getPurchase/' + data.purchase.purchaseNo;
                   }
                    })
           }else{
-
-            let msg = '결제에 실패하였습니다.';
+                let msg = '결제에 실패하였습니다.';
                  msg += '에러내용 : ' + rsp.error_msg;
-
           }
           toastr.error(msg,"",{timeOut:2000});
       })
